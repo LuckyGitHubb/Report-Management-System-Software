@@ -21,6 +21,9 @@ app.use(
 app.use(express.json())  // when we send the data from frontend (headers: application/json) sending json string express.json converts into object
 app.use(express.urlencoded({ extended:true })) // this is for form data converts into JSON object
 
+app.get("/", (req, res) => {
+    res.send("Server is running");
+});
 app.use('/report',reportRouter)
 app.use('/report-template',reportTemplateRouter)
         

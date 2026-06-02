@@ -80,7 +80,9 @@ function ReportForm() {
       console.log('payload: ', payload)
       const response = await state?.mode === "edit" ?
         updateReport(payload, state?.item?.id) : createReport(payload);
-      navigate('/reports')
+      setTimeout(() => {
+        navigate('/reports')
+      }, 1000)
     } catch (error) {
       console.log('error: ', error)
     }
@@ -94,34 +96,34 @@ function ReportForm() {
   return (
     <div>
       {state?.mode === "view" ? (
-      <div className="flex items-center justify-between border-b px-8 py-5 bg-white">
-        <div>
+        <div className="flex items-center justify-between border-b px-8 py-5 bg-white">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Create Report
+            </h1>
+          </div>
+
+          <div>
+            <PDFDownloadLink
+              document={<ReportPDF item={state?.item} />}
+              fileName="report.pdf"
+            >
+              {({ loading }) => (
+                <button
+                  className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200 text-white px-5 py-2 rounded-lg font-medium shadow-sm"
+                >
+                  {loading ? "Generating PDF..." : "Download PDF"}
+                </button>
+              )}
+            </PDFDownloadLink>
+          </div>
+        </div>
+      ) : (
+        <div className="border-b px-8 py-5">
           <h1 className="text-3xl font-bold text-gray-800">
             Create Report
           </h1>
         </div>
-
-        <div>
-          <PDFDownloadLink
-            document={<ReportPDF item={state?.item} />}
-            fileName="report.pdf"
-          >
-            {({ loading }) => (
-              <button
-                className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200 text-white px-5 py-2 rounded-lg font-medium shadow-sm"
-              >
-                {loading ? "Generating PDF..." : "Download PDF"}
-              </button>
-            )}
-          </PDFDownloadLink>
-        </div>
-      </div>
-      ) : (
-        <div className="border-b px-8 py-5">
-                <h1 className="text-3xl font-bold text-gray-800">
-                    Create Report
-                </h1>
-            </div>
       )}
 
       {/* Form */}
@@ -214,9 +216,13 @@ function ReportForm() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md transition"
+              className={`px-8 py-3 rounded-xl font-semibold shadow-md transition text-white
+                ${loading
+                  ? "bg-blue-400 cursor-not-allowed opacity-60 blur-[1px]"
+                  : "bg-blue-600 hover:bg-blue-700"
+                }`}
             >
-              Save Report Template
+              {loading ? "Saving Report..." : "Save Report"}
             </button>
           </div>
         )}

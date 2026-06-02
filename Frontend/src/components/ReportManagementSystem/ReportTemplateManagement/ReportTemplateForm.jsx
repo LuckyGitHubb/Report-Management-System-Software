@@ -62,8 +62,9 @@ function ReportTemplateForm() {
             };
             await createReportTemplate(payload);
             //  toast.success("Report Template created successfully");
-            //  setForm(INITIAL);
-            //  navigate('/report/templates/all')
+            setTimeout(() => {
+                navigate('/report/templates/all')
+            }, 1000)
         } catch (e) {
             const msg = e?.response?.data?.message || "Failed to create report template";
             //  setSubmitError(msg);
@@ -203,10 +204,15 @@ function ReportTemplateForm() {
                 {state?.mode !== "view" && (
                     <div className="flex justify-end">
                         <button
+                            disabled={loading}
                             type="submit"
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md transition"
+                            className={`px-8 py-3 rounded-xl font-semibold shadow-md transition text-white
+                                ${loading
+                                    ? "bg-blue-400 cursor-not-allowed opacity-60 blur-[1px]"
+                                    : "bg-blue-600 hover:bg-blue-700"
+                                }`}
                         >
-                            Save Report Template
+                            {loading ? "Save Report Template..." : "Save Report Template"}
                         </button>
                     </div>
                 )}

@@ -6,6 +6,10 @@ import { fetchAllReportTemplates } from "../../../services/api/reportTemplateApi
 
 function ReportTemplateList() {
   const [reportTemplateData, setReportTemplateData] = useState([])
+  const [paginatedReportTemplateData, setPaginatedReportTemplateData] = useState([])
+  const [pageSize, setPageSize] = useState(5)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPage, setTotalPage] = useState("")
   const navigate = useNavigate();
 
   const fetchAllReportTemplateData = async () => {
@@ -13,6 +17,7 @@ function ReportTemplateList() {
         const response = await fetchAllReportTemplates()
         const { data } = response?.data;
         setReportTemplateData(data)
+        setPaginatedReportTemplateData(data)
       } catch (error) {
         console.log('error: ', error)
       }
@@ -21,6 +26,19 @@ function ReportTemplateList() {
     useEffect(() => {
         fetchAllReportTemplateData()
       }, [])
+
+    useEffect(() => {
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  setPaginatedReportTemplateData(
+    reportTemplateData.slice(startIndex, endIndex)
+  );
+}, [reportTemplateData, currentPage, pageSize]);  
+
+const handlePageChange = (page)=>{
+  setCurrentPage(page)
+}
 
   return (
     <div className="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">
@@ -53,8 +71,8 @@ function ReportTemplateList() {
           </thead>
 
           <tbody>
-            {reportTemplateData.length > 0 &&
-            reportTemplateData.map((item,index)=>(
+            {paginatedReportTemplateData.length > 0 &&
+            paginatedReportTemplateData.map((item,index)=>(
                 <tr
                   key={item?.id}
                   className="border-t hover:bg-gray-50 transition"
@@ -87,6 +105,41 @@ function ReportTemplateList() {
           </tbody>
 
         </table>
+
+        {/* Pagination */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-2 p-10">
+  {/* Page Size Selector */}
+  <div>
+    <select
+      onChange={(e) => setPageSize(Number(e.target.value))}
+      className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="5">5 per page</option>
+      <option value="10">10 per page</option>
+      <option value="20">20 per page</option>
+      <option value="50">50 per page</option>
+    </select>
+  </div>
+
+  {/* Pagination */}
+  <div className="flex items-center gap-2">
+    {/* {totalPage?.length > 0 && */}
+      {(Array(Math.ceil(reportTemplateData.length / pageSize)).fill(null)).map((_, i) => (
+        <button
+          key={i}
+          onClick={()=>handlePageChange(i+1)}
+          className={`w-9 h-9 flex items-center justify-center rounded-md border cursor-pointer ${
+        currentPage === i + 1
+          ? "bg-blue-500 text-white border-blue-500"
+          : "border-gray-300 bg-white text-gray-700"
+      }`}
+        >
+          {i + 1}
+        </button>
+      ))}
+  </div>
+</div>
+
       </div>
     </div>
   );

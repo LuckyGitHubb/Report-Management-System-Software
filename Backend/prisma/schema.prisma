@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole{
+  USER
+  ADMIN
+}
+
+model User {
+  id        String @id @default(uuid())
+  name      String
+  email     String @unique
+  password  String
+  role      UserRole
+}
+
 model ReportTemplate {
   id         String   @id @default(uuid())
   reportName String

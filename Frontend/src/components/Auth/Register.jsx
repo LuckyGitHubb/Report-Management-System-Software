@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import image from '../../assets/software-register-image.png'
 import { Eye, EyeOff, User } from 'lucide-react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { authRegister } from '../../services/api/authApi';
+import { toast } from 'react-toastify';
 
 const INITIAL = {
     name:'',
@@ -16,8 +17,12 @@ function Register() {
     const [loading, setLoading] = useState(false);
     const [showPassword,setShowPassword] = useState(false);
     const [showConfirmPassword,setShowConfirmPassword] = useState(false);
+    const [confirmPassword,setConfirmPassword] = useState("");
+    const navigate = useNavigate()
 
     const handleRegister = async () => {
+        if(form?.password!==confirmPassword)
+            return toast.error('password and confirm password should be same')
         setLoading(true)
         try {
           const payload = form;
@@ -70,7 +75,8 @@ function Register() {
                     </div>
                     <div className="relative w-96">
                         <input className="text-lg w-96 border border-gray-300 rounded-lg px-4 py-3 h-18 outline-none focus:ring-2 focus:ring-blue-500 my-2"
-                            type={ showConfirmPassword ? "text" : "password" } name="name" placeholder="Enter Your Confirm Password" />
+                            type={ showConfirmPassword ? "text" : "password" } name="name" placeholder="Enter Your Confirm Password" 
+                            onChange={(e)=>setConfirmPassword(e.target.value)}/>
                         <button onClick={()=>setShowConfirmPassword(!showConfirmPassword)}
                         className="absolute top-1/3 right-4 cursor-pointer">
                             { showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} /> } 
@@ -82,6 +88,7 @@ function Register() {
                             <span className="text-blue-500">Privacy Policy</span>
                         </h3>
                         <button
+                        onClick={handleRegister}
                             disabled={loading}
                             className={`px-8 py-3 rounded-lg font-semibold shadow-md transition text-white w-full my-4
                                 ${loading

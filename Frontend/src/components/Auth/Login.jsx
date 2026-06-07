@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import image from '../../assets/software-register-image.png'
 import { Eye, EyeOff, User } from 'lucide-react'
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { authLogin } from '../../services/api/authApi';
 import { AuthContext } from '../../context/AuthProvider';
+import { toast } from 'react-toastify';
 
 const INITIAL = {
     email:'',
@@ -18,6 +19,7 @@ function Login() {
     const uppercaseRole = role?.toUpperCase()
     const { state } = useLocation()
     const { setUser } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const handleLogin = async () => {
         setLoading(true)
@@ -29,9 +31,9 @@ function Login() {
           }
           const response = await authLogin(payload);
             toast.success(response?.data?.message || `${form.role} login successfully`)
-            setUser(...payload,state?.name)
+            setUser(response?.data?.data)
           setTimeout(() => {
-            navigate('/login')
+            navigate('/dashboard')
           }, 1000)
         } catch (error) {
           toast.error('something went wrong')
@@ -80,6 +82,7 @@ function Login() {
                             <span className="text-blue-500">Privacy Policy</span>
                         </h3>
                         <button
+                        onClick={handleLogin}
                             disabled={loading}
                             className={`px-8 py-3 rounded-lg font-semibold shadow-md transition text-white w-full my-4
                                                     ${loading
@@ -90,7 +93,7 @@ function Login() {
                             {loading ? "Logging In..." : "Login"}
                         </button>
                         <h3 className="text-lg text-gray-400 my-4">Not have an Account?
-                            <NavLink className="text-blue-500" to="/register"> Register</NavLink>
+                            <NavLink className="text-blue-500" to="/"> Register</NavLink>   
                         </h3>
                     </div>
                 </div>

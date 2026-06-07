@@ -1,8 +1,34 @@
 // components/layout/Header.jsx
 
 import { Menu, Bell, User } from "lucide-react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { authLogout } from "../../services/api/authApi";
 
 function Header({ setIsOpen }) {
+  const { user } = useContext(AuthContext)
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleLogout = async () => {
+    setLoading(true)
+    try {
+      const response = await authLogout();
+      toast.success(response?.data?.message || `${user?.name} logout successfully`)
+      setTimeout(() => {
+        navigate('/login')
+      }, 1000)
+    } catch (error) {
+      toast.error('something went wrong')
+      console.log('error: ', error)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
   return (
     <header className="h-16 bg-white border-b shadow-sm px-6 flex items-center justify-between">
       {/* Left Side */}
@@ -29,15 +55,37 @@ function Header({ setIsOpen }) {
         </button>
 
         {/* User */}
-        <div className="flex items-center gap-2 cursor-pointer">
-          <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center">
+        <div className="relative">
+          <div
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer"
+          >
             <User size={18} />
           </div>
 
-          <div className="hidden md:block">
-            <p className="text-sm font-medium">Lucky</p>
-            <p className="text-xs text-gray-500">Admin</p>
-          </div>
+          {showDropdown && (
+            <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border z-50">
+              <div className="px-4 py-3 border-b">
+                <p className="font-medium">{user?.name}</p>
+                <p className="text-sm text-gray-500">
+                  {user?.role?.toLowerCase()}
+                </p>
+              </div>
+
+              <button
+                className="w-full text-left px-4 py-3 hover:bg-gray-100"
+              >
+                Profile
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

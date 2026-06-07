@@ -6,3 +6,6 @@ export const authRegister = (form) => {
 export const authLogin = (form) => {
   return baseApi.post("/auth/login", { ...form });
 };
+export const authLogout = () => {
+  return baseApi.post("/auth/logout");
+};

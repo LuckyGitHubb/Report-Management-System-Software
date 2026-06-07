@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 app.use('/report',reportRouter)
-app.use('/dasboard',dashboardRouter)
+app.use('/dashboard',dashboardRouter)
 app.use('/report-template',reportTemplateRouter)
         
 app.listen(PORT,()=>{

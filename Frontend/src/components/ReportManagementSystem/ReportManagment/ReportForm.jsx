@@ -4,6 +4,7 @@ import { createReport, updateReport } from '../../../services/api/reportApi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ReportPDF from './ReportPDF'
 import { PDFDownloadLink } from '@react-pdf/renderer'
+import { toast } from 'react-toastify'
 
 const INITIAL = {
   reportTemplateId: "",
@@ -77,13 +78,14 @@ function ReportForm() {
     setLoading(true)
     try {
       const payload = form;
-      console.log('payload: ', payload)
       const response = await state?.mode === "edit" ?
         updateReport(payload, state?.item?.id) : createReport(payload);
+        toast.success(response?.data?.message || 'report created successfully')
       setTimeout(() => {
         navigate('/reports')
       }, 1000)
     } catch (error) {
+      toast.error('something went wrong')
       console.log('error: ', error)
     }
     finally {

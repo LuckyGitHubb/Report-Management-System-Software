@@ -1,5 +1,5 @@
 import { prisma } from "../config/db.js"
-import { successResponse } from "../utilities/response-handler.js"
+import { errorResponse, successResponse } from "../utilities/response-handler.js"
 
 const getDashboardOverview = async (req, res) => {
     try {
@@ -25,41 +25,48 @@ const getDashboardOverview = async (req, res) => {
 
 const getTopFiveReportTemplate = async (req, res) => {
     try {
-        const topTemplates = await prisma.reportTemplate.groupBy({
+        const topTemplates = await prisma.report.groupBy({
             by: ["reportTemplateId"],
             _count: {
-                reportTemplateId: true
+                reportTemplateId: true,
             },
             orderBy: {
-                count: {
-                    reportTemplatedId: "desc"
-                }
+                _count: {
+                    reportTemplateId: "desc",
+                },
             },
-            take: 5
-        })
-        const templates = await prisma.reportTemplate.findMany({
-            where: {
-                id: {
-                    in: topTemplates.map((item) => item.reportTemplateId)
-                }
-            }
-        })
-        const result = topTemplates.map((item) => ({
-            template: templates.find(
-                (t) => t.id === item.reportTemplateId
-            ),
-            usageCount: item._count.reportTemplateId,
-        }));
+            take: 5,
+        });
+
+        const result = await Promise.all(
+            topTemplates.map(async (item) => {
+                const template = await prisma.reportTemplate.findUnique({
+                    where: {
+                        id: item.reportTemplateId,
+                    },
+                    select: {
+                        id: true,
+                        reportName: true,
+                        createdAt: true,
+                    },
+                });
+
+                return {
+                    ...template,
+                    usageCount: item._count.reportTemplateId,
+                };
+            })
+        );
 
         return successResponse(
             res,
             result,
-            "Report template fecthed successfully"
-        )
+            "Top report templates fetched successfully"
+        );
     } catch (error) {
         return errorResponse(res, error);
     }
-}
+};
 
 const getReportsByMonth = async (req, res) => {
     try {

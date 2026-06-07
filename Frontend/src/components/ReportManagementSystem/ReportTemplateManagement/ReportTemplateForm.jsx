@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { createReportTemplate } from "../../../services/api/reportTemplateApi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ReportTemplateForm() {
     const [reportName, setReportName] = useState("");
     const [loading, setLoading] = useState(false);
     const { state } = useLocation();
+    const navigate = useNavigate()
     const [fields, setFields] = useState([
         {
             reportLabel: "",
@@ -28,7 +30,6 @@ function ReportTemplateForm() {
         }
     }, [state])
 
-    console.log('state: ', state)
     const handleAddField = () => {
         setFields([
             ...fields,
@@ -60,15 +61,14 @@ function ReportTemplateForm() {
                 // sectionTitle,
                 fields,
             };
-            await createReportTemplate(payload);
-            //  toast.success("Report Template created successfully");
+            const response = await createReportTemplate(payload);
+             toast.success(response?.data?.message || "Report Template created successfully");
             setTimeout(() => {
-                navigate('/report/templates/all')
+                navigate('/report/templates')
             }, 1000)
         } catch (e) {
-            const msg = e?.response?.data?.message || "Failed to create report template";
-            //  setSubmitError(msg);
-            //  toast.error(msg);
+             toast.error("something went wrong");
+             console.log(e)
         } finally {
             setLoading(false);
         }

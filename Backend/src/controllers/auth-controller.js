@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
-import { prisma } from "../config/db";
-import { earlyReturnRespone, successResponse } from "../utilities/response-handler";
+import { prisma } from "../config/db.js";
+import { earlyReturnRespone, errorResponse, successResponse } from "../utilities/response-handler.js";
 import bcrypt from 'bcryptjs'
+import dotenv from 'dotenv';
 
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
@@ -10,8 +11,8 @@ const register = async (req, res) => {
             return earlyReturnRespone(res, "fields are required", 400)
         }
         const hashPassword = await bcrypt.hash(password, 10)
-        const user = await prisma.User.create({
-            name, email, password: hashPassword, role
+        const user = await prisma.user.create({
+            data:{name, email, password: hashPassword, role}
         })
         return successResponse(
             res,
@@ -31,7 +32,7 @@ const login = async (req, res) => {
         if (!email || !password) {
             return earlyReturnRespone(res, "fields are required", 400)
         }
-        const user = await prisma.User.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email }
         })
         if (!user) {
@@ -56,7 +57,7 @@ const login = async (req, res) => {
 
         res.cookie("token",token,{
             httpOnly: true,
-            secure: false, // ture in production    
+            secure: false, // true in production    
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
@@ -71,7 +72,53 @@ const login = async (req, res) => {
     }
 }
 
-exports = {
+const logout = async (req, res) => {
+    try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+        });
+
+        return successResponse(
+            res,
+            null,
+            "User logged out successfully"
+        );
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+};
+
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany({})
+        return successResponse(res, users, "Users fetched successfully.", 200);
+    }
+    catch (error) {
+        return errorResponse(res, error);
+    }
+}
+
+const getUserById = async (req,res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id }
+        })
+        if (!user) {
+          return earlyReturnRespone(res, " User not found.", 404);
+        }
+        return successResponse(res, user, "User fetched successfully.", 200);
+    }
+    catch (error) {
+        return errorResponse(res, error);
+    }
+}
+
+export {
     register,
-    login
+    login,
+    logout,
+    getAllUsers,
+    getUserById
 }

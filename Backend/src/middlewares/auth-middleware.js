@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { earlyReturnRespone, errorResponse } from "../utilities/response-handler";
+import { earlyReturnRespone, errorResponse } from "../utilities/response-handler.js";
 
 export const authMiddleware = async(req,res)=>{
     try {

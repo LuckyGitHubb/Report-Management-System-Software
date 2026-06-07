@@ -24,7 +24,7 @@ function Register() {
           const response = await authRegister(payload);
             toast.success(response?.data?.message || 'user registered successfully')
           setTimeout(() => {
-            navigate('/login')
+            navigate('/login', { state: { name: payload?.name } })
           }, 1000)
         } catch (error) {
           toast.error('something went wrong')

@@ -12,6 +12,7 @@ import Dashboard from './components/ReportManagementSystem/DashboardManagement/D
 import Layout from './components/Layout/Layout'
 import Register from './components/Auth/Register'
 import Login from './components/Auth/Login'
+import AuthProvider from './context/AuthProvider'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,18 +20,20 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/login/admin" element={<Login />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="/report" element={<ReportForm />} />
-            <Route path="/reports" element={<ReportList />} />
-            <Route path="/report/template" element={<ReportTemplateForm />} />
-            <Route path="/report/templates" element={<ReportTemplateList />} />
-          </Route>
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/login/admin" element={<Login />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="/report" element={<ReportForm />} />
+              <Route path="/reports" element={<ReportList />} />
+              <Route path="/report/template" element={<ReportTemplateForm />} />
+              <Route path="/report/templates" element={<ReportTemplateList />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </>
   )

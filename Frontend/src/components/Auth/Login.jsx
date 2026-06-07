@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import image from '../../assets/software-register-image.png'
 import { Eye, EyeOff, User } from 'lucide-react'
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { authLogin } from '../../services/api/authApi';
+import { AuthContext } from '../../context/AuthProvider';
 
 const INITIAL = {
     email:'',
@@ -15,6 +16,8 @@ function Login() {
     const [showPassword,setShowPassword] = useState(false);
     const { role } = useParams()
     const uppercaseRole = role?.toUpperCase()
+    const { state } = useLocation()
+    const { setUser } = useContext(AuthContext)
 
     const handleLogin = async () => {
         setLoading(true)
@@ -26,6 +29,7 @@ function Login() {
           }
           const response = await authLogin(payload);
             toast.success(response?.data?.message || `${form.role} login successfully`)
+            setUser(payload)
           setTimeout(() => {
             navigate('/login')
           }, 1000)

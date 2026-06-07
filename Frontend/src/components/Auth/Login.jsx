@@ -29,7 +29,7 @@ function Login() {
           }
           const response = await authLogin(payload);
             toast.success(response?.data?.message || `${form.role} login successfully`)
-            setUser(payload)
+            setUser(...payload,state?.name)
           setTimeout(() => {
             navigate('/login')
           }, 1000)

@@ -104,7 +104,7 @@ function ReportTemplateForm() {
                             placeholder="Enter report name"
                             value={reportName}
                             onChange={(e) => setReportName(e.target.value)}
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                 </div>
@@ -120,7 +120,7 @@ function ReportTemplateForm() {
                             <button
                                 type="button"
                                 onClick={handleAddField}
-                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl transition"
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg transition"
                             >
                                 <Plus size={18} />
                                 Add Field
@@ -153,7 +153,7 @@ function ReportTemplateForm() {
                                                 e.target.value
                                             )
                                         }
-                                        className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
 
@@ -173,7 +173,7 @@ function ReportTemplateForm() {
                                                 e.target.value
                                             )
                                         }
-                                        className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option value="text">Text</option>
                                         <option value="number">Number</option>
@@ -188,7 +188,7 @@ function ReportTemplateForm() {
                                         <button
                                             type="button"
                                             onClick={() => handleRemoveField(index)}
-                                            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-xl transition"
+                                            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition"
                                         >
                                             <Trash2 size={18} />
                                             Delete
@@ -206,7 +206,7 @@ function ReportTemplateForm() {
                         <button
                             disabled={loading}
                             type="submit"
-                            className={`px-8 py-3 rounded-xl font-semibold shadow-md transition text-white
+                            className={`px-8 py-3 rounded-lg font-semibold shadow-md transition text-white
                                 ${loading
                                     ? "bg-blue-400 cursor-not-allowed opacity-60 blur-[1px]"
                                     : "bg-blue-600 hover:bg-blue-700"

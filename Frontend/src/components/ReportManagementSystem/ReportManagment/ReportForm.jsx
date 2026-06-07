@@ -143,7 +143,7 @@ function ReportForm() {
               disabled={state?.mode === "edit" || state?.mode === "view"}
               value={form.reportTemplateId}
               onChange={(e) => setForm({ ...form, reportTemplateId: e?.target?.value })}
-              className={`w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 ${state?.mode === "edit" && "bg-gray-300"}`}
+              className={`w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 ${state?.mode === "edit" && "bg-gray-300"}`}
             >
               <option disabled value="">Select Report </option>
               {reportTemplateData.map((item, i) => (
@@ -180,7 +180,7 @@ function ReportForm() {
                             e.target.value
                           )
                         }
-                        className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   )
@@ -203,7 +203,7 @@ function ReportForm() {
                             e.target.value
                           )
                         }
-                        className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   )
@@ -218,7 +218,7 @@ function ReportForm() {
             <button
               type="submit"
               disabled={loading}
-              className={`px-8 py-3 rounded-xl font-semibold shadow-md transition text-white
+              className={`px-8 py-3 rounded-lg font-semibold shadow-md transition text-white
                 ${loading
                   ? "bg-blue-400 cursor-not-allowed opacity-60 blur-[1px]"
                   : "bg-blue-600 hover:bg-blue-700"

@@ -2,21 +2,27 @@ import { Eye, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchAllReports } from "../../../services/api/reportApi";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../Common/Loader/Loader";
 
 function ReportList() {
   const [reportData, setReportData] = useState([])
+  const [loading,setLoading] = useState(false)
   const [paginatedReportData, setPaginatedReportData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(5)
   const navigate = useNavigate();
 
   const fetchAllReportData = async () => {
+    setLoading(true)
     try {
       const response = await fetchAllReports()
       const { data } = response?.data;
       setReportData(data)
     } catch (error) {
       console.log('error: ', error)
+    }
+    finally{
+      setLoading(false)
     }
   }
 
@@ -29,6 +35,9 @@ function ReportList() {
     let endIndex = startIndex + pageSize;
     setPaginatedReportData(reportData.slice(startIndex, endIndex))
   }, [currentPage, pageSize, reportData])
+
+  if(loading) return <Loader/>
+
 
   return (
     <div className="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">

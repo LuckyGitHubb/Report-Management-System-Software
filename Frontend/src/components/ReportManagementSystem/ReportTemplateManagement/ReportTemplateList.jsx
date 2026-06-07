@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { fetchAllReports } from "../../../services/api/reportApi";
 import { useNavigate } from "react-router-dom";
 import { fetchAllReportTemplates } from "../../../services/api/reportTemplateApi";
+import { Loader } from "../../Common/Loader/Loader";
 
 function ReportTemplateList() {
   const [reportTemplateData, setReportTemplateData] = useState([])
+  const [loading,setLoading] = useState(false)
   const [paginatedReportTemplateData, setPaginatedReportTemplateData] = useState([])
   const [pageSize, setPageSize] = useState(5)
   const [currentPage, setCurrentPage] = useState(1)
@@ -13,6 +15,7 @@ function ReportTemplateList() {
   const navigate = useNavigate();
 
   const fetchAllReportTemplateData = async () => {
+    setLoading(true)
       try {
         const response = await fetchAllReportTemplates()
         const { data } = response?.data;
@@ -20,6 +23,9 @@ function ReportTemplateList() {
         setPaginatedReportTemplateData(data)
       } catch (error) {
         console.log('error: ', error)
+      }
+      finally{
+        setLoading(false)
       }
     }
 
@@ -39,6 +45,8 @@ function ReportTemplateList() {
 const handlePageChange = (page)=>{
   setCurrentPage(page)
 }
+
+if(loading) return <Loader/>
 
   return (
     <div className="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">

@@ -10,6 +10,8 @@ import ReportTemplateForm from './components/ReportManagementSystem/ReportTempla
 import ReportTemplateList from './components/ReportManagementSystem/ReportTemplateManagement/ReportTemplateList'
 import Dashboard from './components/ReportManagementSystem/DashboardManagement/Dashboard'
 import Layout from './components/Layout/Layout'
+import Register from './components/Auth/Register'
+import Login from './components/Auth/Login'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,6 +20,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/login/admin" element={<Login />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="/report" element={<ReportForm />} />

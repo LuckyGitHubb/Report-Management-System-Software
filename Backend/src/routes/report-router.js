@@ -1,15 +1,16 @@
 import { Router } from "express";
 import { createReport, getAllReports, getReportById, updateReport } from "../controllers/report-controllers.js";
+import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 const reportRouter = Router();
 
-reportRouter.post("/", createReport);
+reportRouter.post("/", authMiddleware, createReport);
 
-reportRouter.get("/all", getAllReports);
+reportRouter.get("/all", authMiddleware, getAllReports);
 
-reportRouter.get("/:id", getReportById);
+reportRouter.get("/:id", authMiddleware, getReportById);
 
-reportRouter.put("/:id", updateReport);
+reportRouter.put("/:id", authMiddleware, updateReport);
 
 
 export default reportRouter; 

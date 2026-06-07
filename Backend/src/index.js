@@ -6,6 +6,7 @@ import reportRouter from './routes/report-router.js';
 import reportTemplateRouter from './routes/report-template-router.js';
 import cookieParser from 'cookie-parser'
 import dashboardRouter from './routes/dashboardRoutes.js';
+import authRouter from './routes/auth-router.js';
 
 dotenv.config();
 connectDB();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended:true })) // this is for form data converts
 app.get("/", (req, res) => {
     res.send("Server is running");
 });
+app.use('/auth',authRouter)
 app.use('/report',reportRouter)
 app.use('/dashboard',dashboardRouter)
 app.use('/report-template',reportTemplateRouter)

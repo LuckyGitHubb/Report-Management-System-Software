@@ -70,3 +70,8 @@ const login = async (req, res) => {
         return errorResponse(res, error);
     }
 }
+
+exports = {
+    register,
+    login
+}

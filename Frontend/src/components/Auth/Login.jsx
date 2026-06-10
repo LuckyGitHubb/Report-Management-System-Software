@@ -36,7 +36,7 @@ function Login() {
             navigate('/dashboard')
           }, 1000)
         } catch (error) {
-          toast.error('something went wrong')
+          toast.error(error?.response?.data?.message || 'something went wrong')
           console.log('error: ', error)
         }
         finally {

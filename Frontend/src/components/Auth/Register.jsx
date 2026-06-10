@@ -32,7 +32,7 @@ function Register() {
             navigate('/login', { state: { name: payload?.name } })
           }, 1000)
         } catch (error) {
-          toast.error('something went wrong')
+          toast.error(error?.response?.data?.message || 'something went wrong')
           console.log('error: ', error)
         }
         finally {

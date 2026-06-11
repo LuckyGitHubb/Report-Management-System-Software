@@ -5,11 +5,20 @@ import {
   Users,
   FileText,
   Settings,
+  FilePlus,
+  Files,
+  FileSpreadsheet,
+  FolderKanban,
 } from "lucide-react";
+import { useContext } from "react";
 
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 
-const menuItems = [
+function Sidebar({ isOpen }) {
+  const { user } = useContext(AuthContext)
+
+  const menuItems = [
   {
     name: "Dashboard",
     icon: <LayoutDashboard size={20} />,
@@ -17,33 +26,39 @@ const menuItems = [
   },
   {
     name: "Create Report",
-    icon: <FileText size={20} />,
+    icon: <FilePlus size={20} />,
     path: "/report",
   },
   {
     name: "Reports",
-    icon: <FileText size={20} />,
+    icon: <Files size={20} />,
     path: "/reports",
   },
   {
     name: "Create Report Template",
-    icon: <FileText size={20} />,
+    icon: <FileSpreadsheet size={20} />,
     path: "/report/template",
   },
   {
     name: "Report Templates",
-    icon: <FileText size={20} />,
+    icon: <FolderKanban size={20} />,
     path: "/report/templates",
   },
+  ...(user?.role === "ADMIN"
+    ? [
+      {
+        name: "Users",
+        icon: <Users size={20} />,
+        path: "/users",
+      },
+    ]
+    : []),
 ];
-
-function Sidebar({ isOpen }) {
   return (
     <aside
-  className={`bg-white border-r shadow-sm transition-all duration-300 ${
-    isOpen ? "w-64" : "w-20"
-  } min-h-screen`}
-> 
+      className={`bg-white border-r shadow-sm transition-all duration-300 ${isOpen ? "w-64" : "w-20"
+        } min-h-screen`}
+    >
       {/* Logo */}
       <div className="h-16 flex items-center justify-center border-b">
         {isOpen ? (

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { fetchAllReportTemplates } from '../../../services/api/reportTemplateApi'
-import { createReport, updateReport } from '../../../services/api/reportApi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ReportPDF from './ReportPDF'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { toast } from 'react-toastify'
+import { createReport, updateReport } from '../../../services/api/reportApi'
 
 const INITIAL = {
   reportTemplateId: "",

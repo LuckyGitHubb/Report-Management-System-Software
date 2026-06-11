@@ -3,6 +3,7 @@ import { prisma } from "../config/db.js";
 import { earlyReturnRespone, errorResponse, successResponse } from "../utilities/response-handler.js";
 import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv';
+import generateUniqueCode from "../utilities/generate-unique-code.js";
 
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
@@ -10,9 +11,11 @@ const register = async (req, res) => {
         if (!name || !email || !password || !role) {
             return earlyReturnRespone(res, "fields are required", 400)
         }
+        const codeName = role === "ADMIN" ? "ADM" : "USER"
+        const code = await generateUniqueCode('user', codeName);
         const hashPassword = await bcrypt.hash(password, 10)
         const user = await prisma.user.create({
-            data:{name, email, password: hashPassword, role}
+            data:{name, code, email, password: hashPassword, role}
         })
         return successResponse(
             res,

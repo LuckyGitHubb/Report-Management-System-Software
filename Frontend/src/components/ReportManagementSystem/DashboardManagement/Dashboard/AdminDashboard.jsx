@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import useDashboard from '../../../hooks/useDashboard'
-import { Loader } from '../../Common/Loader/Loader'
-import { ChartHeader, ReportsByMonthChart, StatCard, TopFiveReportPieChart } from './DashboardComponents'
-import { monthTypes } from '../../../constants/monthTypes'
+import useDashboard from '../../../../hooks/useAdminDashboard'
+import { Loader } from '../../../Common/Loader/Loader'
+import { ChartHeader, ReportsByMonthChart, StatCard, TopFiveReportPieChart } from '../Components/AdminDashboardComponents'
+import { monthTypes } from '../../../../constants/monthTypes'
 
-function Dashboard() {
+function AdminDashboard() {
   const [selectedMonth, setSelectedMonth] = useState(5)
   const { loading, dashboardOverview, topReportTemplates, monthlyReports, recentReports } = useDashboard(selectedMonth)
   if (loading) return <Loader />
@@ -51,4 +51,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default AdminDashboard

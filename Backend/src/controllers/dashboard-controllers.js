@@ -134,9 +134,202 @@ const getRecentReports = async (req, res) => {
     }
 }
 
+const getTodayReports = async (req, res) => {
+    try {
+        const today = new Date();
+
+        const startOfDay = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate()
+        );
+
+        const endOfDay = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate() + 1
+        );
+
+        const reportsCount = await prisma.report.count({
+            where: {
+                createdAt: {
+                    gte: startOfDay,
+                    lt: endOfDay,
+                },
+            },
+        });
+
+        return successResponse(
+            res,
+            { reportsCount },
+            "Today's reports fetched successfully"
+        );
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+};
+
+// User Dashboard APIs
+const getMyDashboardOverview = async (req,res) => {
+    try {
+        const userId = req.user.id;
+        const reportsCount = await prisma.report.count({
+            where: { createdBy: userId }
+        })
+        return successResponse(res, reportsCount, "Report Counts fecthed successfully");
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+}
+
+const getMyRecentReports = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const reports = await prisma.report.findMany({
+            where: {
+                createdBy: userId
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
+            take: 10
+        });
+
+        return successResponse(
+            res,
+            reports,
+            "Recent reports fetched successfully"
+        );
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+};
+
+
+const getMyReportsByMonth = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const month = Number(req.query.month);
+
+        const currentYear = new Date().getFullYear();
+
+        const startDate = new Date(currentYear, month - 1, 1);
+        const endDate = new Date(currentYear, month, 1);
+
+        const reportCount = await prisma.report.count({
+            where: {
+                createdBy: userId,
+                createdAt: {
+                    gte: startDate,
+                    lt: endDate,
+                },
+            },
+        });
+
+        return successResponse(
+            res,
+            { reportCount },
+            "Monthly reports fetched successfully"
+        );
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+};
+
+const getMyReportStats = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const now = new Date();
+
+        const startOfMonth = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+        );
+
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay());
+
+        const [totalReports, monthlyReports, weeklyReports] =
+            await Promise.all([
+                prisma.report.count({
+                    where: {
+                        createdBy: userId,
+                    },
+                }),
+                prisma.report.count({
+                    where: {
+                        createdBy: userId,
+                        createdAt: {
+                            gte: startOfMonth,
+                        },
+                    },
+                }),
+                prisma.report.count({
+                    where: {
+                        createdBy: userId,
+                        createdAt: {
+                            gte: startOfWeek,
+                        },
+                    },
+                }),
+            ]);
+
+        return successResponse(
+            res,
+            {
+                totalReports,
+                monthlyReports,
+                weeklyReports,
+            },
+            "Report statistics fetched successfully"
+        );
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+};
+
+const getMyLastGeneratedReport = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const report = await prisma.report.findFirst({
+            where: {
+                createdBy: userId,
+            },
+            include: {
+                reportTemplate: {
+                    select: {
+                        reportName: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+
+        return successResponse(
+            res,
+            report,
+            "Last generated report fetched successfully"
+        );
+    } catch (error) {
+        return errorResponse(res, error);
+    }
+};
+
 export {
     getDashboardOverview,
     getTopFiveReportTemplate,
     getReportsByMonth,
-    getRecentReports
+    getRecentReports,
+    getTodayReports,
+    getMyDashboardOverview,
+    getMyLastGeneratedReport,
+    getMyRecentReports,
+    getMyReportStats,
+    getMyReportsByMonth,
 }

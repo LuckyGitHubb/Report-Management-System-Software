@@ -9,9 +9,9 @@ authRouter.post("/login", login);
 
 authRouter.post("/logout", logout);
 
-authRouter.post("/user/:id", getUserById);
+authRouter.get("/user/:id", getUserById);
 
-authRouter.post("/users", getAllUsers);
+authRouter.get("/users", getAllUsers);
 
 
 export default authRouter; 

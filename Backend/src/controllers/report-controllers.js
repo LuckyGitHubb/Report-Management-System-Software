@@ -1,4 +1,5 @@
 import { prisma } from "../config/db.js";
+import generateUniqueCode from "../utilities/generate-unique-code.js";
 import { earlyReturnRespone, errorResponse, successResponse } from "../utilities/response-handler.js";
 
 const createReport = async (req, res) => {
@@ -17,6 +18,7 @@ const createReport = async (req, res) => {
       return earlyReturnRespone(res, " Report Template not found.", 404);
     }
 
+    const code = await generateUniqueCode('report', 'RPT');
     const report = await prisma.report.create({
       data: {
         reportTemplateId,

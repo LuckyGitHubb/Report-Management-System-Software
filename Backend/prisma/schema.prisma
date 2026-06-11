@@ -14,15 +14,18 @@ enum UserRole{
 
 model User {
   id        String @id @default(uuid())
+  code      String
   name      String
   email     String @unique
   password  String
   role      UserRole
+  reports    Report[]
 }
 
 model ReportTemplate {
   id         String   @id @default(uuid())
   reportName String
+  code       String
   fields     Json
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -32,8 +35,13 @@ model ReportTemplate {
 model Report {
   id               String         @id @default(uuid())
   reportTemplateId String
+  code             String
   reportData       Json 
+  createdBy        String
+
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
+
   reportTemplate   ReportTemplate @relation(fields: [reportTemplateId], references: [id])
+  user   User @relation(fields: [createdBy], references: [id])
 }

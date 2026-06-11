@@ -13,6 +13,10 @@ import Layout from './components/Layout/Layout'
 import Register from './components/Auth/Register'
 import Login from './components/Auth/Login'
 import AuthProvider from './context/AuthProvider'
+import UserList from './components/ReportManagementSystem/UserManagement/UserList'
+import ProtectedRoute from './routes/ProtectedRoute'
+import AdminRoute from './routes/AdminRoute'
+import PublicRoute from './routes/PublicRoute'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,14 +25,40 @@ function App() {
     <>
       <BrowserRouter>
         <AuthProvider>
+
           <Routes>
-            <Route path="/" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/login/admin" element={<Login />} />
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            } />
+            <Route path="/login" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+
+            } />
+            <Route path="/login/admin" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            } />
+            <Route
+              path="/" element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/report" element={<ReportForm />} />
               <Route path="/reports" element={<ReportList />} />
+
+              <Route path="/users"
+                element={
+                  <AdminRoute>
+                    <UserList />
+                  </AdminRoute>
+                } />
               <Route path="/report/template" element={<ReportTemplateForm />} />
               <Route path="/report/templates" element={<ReportTemplateList />} />
             </Route>

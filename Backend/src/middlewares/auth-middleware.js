@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { earlyReturnRespone, errorResponse } from "../utilities/response-handler.js";
 
-export const authMiddleware = async(req,res)=>{
+export const authMiddleware = async(req,res,next)=>{
     try {
-    const token = req.cookie.token;
+    const token = req.cookies.token;
     if (!token) {
       return earlyReturnRespone(
         res,

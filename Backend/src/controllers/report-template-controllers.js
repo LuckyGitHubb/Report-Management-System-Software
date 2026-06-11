@@ -1,4 +1,5 @@
 import { prisma } from "../config/db.js";
+import generateUniqueCode from "../utilities/generate-unique-code.js";
 import { earlyReturnRespone, errorResponse, successResponse } from "../utilities/response-handler.js";
 
 const createReportTemplate = async (req, res) => {
@@ -13,6 +14,7 @@ const createReportTemplate = async (req, res) => {
       return earlyReturnRespone(res, "Fields are required.", 400);
     }
 
+    const code = await generateUniqueCode('report', 'RTEMP');
     const reportTemplate = await prisma.reportTemplate.create({
       data: {
         reportName,

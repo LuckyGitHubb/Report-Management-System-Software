@@ -2,7 +2,7 @@ import { Eye, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../Common/Loader/Loader";
-import { fetchAllUsers } from "../../../services/api/reportApi";
+import { fetchAllUsers } from "../../../services/api/userApi";
 
 function UserList() {
   const [userData, setUserData] = useState([])

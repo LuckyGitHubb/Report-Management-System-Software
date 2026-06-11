@@ -1,9 +1,21 @@
 import baseApi from "./baseApi";
 
-export const fetchAllUsers = () => {
-  return baseApi.get(`/user/all`);
+export const fetchAllReports = () => {
+  return baseApi.get(`/report/all`);
 };
 
-export const fetchUsertById = (id) => {
-  return baseApi.get(`/user/${id}`);
+export const fetchAllReportsByPatientId = () => {
+  return baseApi.get(`/report/all`);
+};      
+
+export const fetchReportById = (id) => {
+  return baseApi.get(`/report/${id}`);
+};
+
+export const createReport = (form) => {
+  return baseApi.post("/report", { ...form });
+};
+
+export const updateReport = (form,id) => {
+  return baseApi.put(`/report/${id}`, { ...form });
 };

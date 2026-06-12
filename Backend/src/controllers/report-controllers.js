@@ -4,7 +4,7 @@ import { earlyReturnRespone, errorResponse, successResponse } from "../utilities
 
 const createReport = async (req, res) => {
   try {
-    let { reportTemplateId, reportData } = req.body;
+    let { reportTemplateId, reportData, createdBy } = req.body;
 
     if (!reportTemplateId) {
       return earlyReturnRespone(res, "Template are required.", 400);
@@ -23,6 +23,8 @@ const createReport = async (req, res) => {
       data: {
         reportTemplateId,
         reportData,
+        code,
+        createdBy
       },
     });
 

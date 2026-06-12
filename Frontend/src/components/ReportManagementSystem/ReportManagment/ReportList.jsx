@@ -45,7 +45,7 @@ function ReportList() {
       {/* Header */}
       <div className="border-b px-8 py-5">
         <h1 className="text-3xl font-bold text-gray-800">
-          All Medical Reports
+          All Reports
         </h1>
       </div>
 
@@ -57,6 +57,10 @@ function ReportList() {
             <tr>
               <th className="text-left px-6 py-4 font-semibold text-gray-700">
                 Sr No.
+              </th>
+
+              <th className="text-left px-6 py-4 font-semibold text-gray-700">
+                Code
               </th>
 
               <th className="text-left px-6 py-4 font-semibold text-gray-700">
@@ -78,6 +82,10 @@ function ReportList() {
                 >
                   <td className="px-6 py-4">
                     {index + 1}
+                  </td>
+
+                  <td className="px-6 py-4">
+                    {item?.code}
                   </td>
 
                   <td className="px-6 py-4">

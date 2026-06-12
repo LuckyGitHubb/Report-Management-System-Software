@@ -1,8 +1,10 @@
 import { Eye, Pencil } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../Common/Loader/Loader";
 import { fetchAllUsers } from "../../../services/api/userApi";
+import { AuthContext } from "../../../context/AuthProvider";
+import ViewUserModal from "./ViewUserModal";
 
 function UserList() {
   const [userData, setUserData] = useState([])
@@ -11,6 +13,16 @@ function UserList() {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(5)
   const navigate = useNavigate();
+  const [viewModal, setViewModal] = useState(false);
+const [selectedUser, setSelectedUser] = useState(null);
+const { user } = useContext(AuthContext)
+
+console.log('user: ',user)
+
+const handleView = (user) => {
+  setSelectedUser(user);
+  setViewModal(true);
+};
 
   const fetchAllUserData = async () => {
     setLoading(true)
@@ -64,6 +76,10 @@ function UserList() {
               </th>
 
               <th className="text-left px-6 py-4 font-semibold text-gray-700">
+                Code
+              </th>
+
+              <th className="text-left px-6 py-4 font-semibold text-gray-700">
                 Email
               </th>
 
@@ -89,6 +105,10 @@ function UserList() {
                   </td>
 
                   <td className="px-6 py-4">
+                    {item?.code}
+                  </td>
+
+                  <td className="px-6 py-4">
                     {item?.email}
                   </td>
 
@@ -97,7 +117,7 @@ function UserList() {
 
                       {/* View */}
                       <button
-                        onClick={() => navigate('/report', { state: { mode: 'view', item } })}
+                        onClick={() => handleView(item)}
                         className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition"
                       >
                         <Eye size={18} />
@@ -154,6 +174,11 @@ function UserList() {
         </div>
 
       </div>
+      <ViewUserModal
+  isOpen={viewModal}
+  onClose={() => setViewModal(false)}
+  user={selectedUser}
+/>
     </div>
   );
 }

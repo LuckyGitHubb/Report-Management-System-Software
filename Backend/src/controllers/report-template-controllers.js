@@ -19,6 +19,7 @@ const createReportTemplate = async (req, res) => {
       data: {
         reportName,
         fields,
+        code
       },
     });
 

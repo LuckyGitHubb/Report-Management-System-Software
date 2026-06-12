@@ -8,7 +8,6 @@ import ReportForm from './components/ReportManagementSystem/ReportManagment/Repo
 import ReportList from './components/ReportManagementSystem/ReportManagment/ReportList'
 import ReportTemplateForm from './components/ReportManagementSystem/ReportTemplateManagement/ReportTemplateForm'
 import ReportTemplateList from './components/ReportManagementSystem/ReportTemplateManagement/ReportTemplateList'
-import Dashboard from './components/ReportManagementSystem/DashboardManagement/Dashboard'
 import Layout from './components/Layout/Layout'
 import Register from './components/Auth/Register'
 import Login from './components/Auth/Login'
@@ -17,6 +16,9 @@ import UserList from './components/ReportManagementSystem/UserManagement/UserLis
 import ProtectedRoute from './routes/ProtectedRoute'
 import AdminRoute from './routes/AdminRoute'
 import PublicRoute from './routes/PublicRoute'
+import AdminDashboard from './components/ReportManagementSystem/DashboardManagement/Dashboard/AdminDashboard'
+import UserDashboard from './components/ReportManagementSystem/DashboardManagement/Dashboard/UserDashboard'
+import UserRoute from './routes/UserRoute'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -49,9 +51,26 @@ function App() {
                   <Layout />
                 </ProtectedRoute>
               }>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/report" element={<ReportForm />} />
-              <Route path="/reports" element={<ReportList />} />
+              <Route path="/admin-dashboard" element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
+              <Route path="/dashboard" element={
+                <UserRoute>
+                  <UserDashboard />
+                </UserRoute>
+              } />
+              <Route path="/report" element={
+                <ProtectedRoute>
+                  <ReportForm />
+                </ProtectedRoute>
+                } />
+              <Route path="/reports" element={
+                <ProtectedRoute>
+                  <ReportList />
+                </ProtectedRoute>
+              } />
 
               <Route path="/users"
                 element={
@@ -59,8 +78,16 @@ function App() {
                     <UserList />
                   </AdminRoute>
                 } />
-              <Route path="/report/template" element={<ReportTemplateForm />} />
-              <Route path="/report/templates" element={<ReportTemplateList />} />
+              <Route path="/report/template" element={
+                <ProtectedRoute>
+                  <ReportTemplateForm />
+                </ProtectedRoute>
+                } />
+              <Route path="/report/templates" element={
+                <ProtectedRoute>
+                  <ReportTemplateList />
+                </ProtectedRoute>
+              } />
             </Route>
           </Routes>
         </AuthProvider>

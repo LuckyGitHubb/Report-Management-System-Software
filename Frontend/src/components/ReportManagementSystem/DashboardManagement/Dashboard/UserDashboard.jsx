@@ -4,7 +4,7 @@ import { ChartHeader, ReportsByMonthChart, StatCard, TopFiveReportPieChart } fro
 import { monthTypes } from '../../../../constants/monthTypes'
 import useUserDashboard from '../../../../hooks/useUserDashboard'
 
-function AdminDashboard() {
+function UserDashboard() {
   const [selectedMonth, setSelectedMonth] = useState(5)
   const { loading,
     dashboardOverview,
@@ -14,6 +14,7 @@ function AdminDashboard() {
     todayReports,
     fetchDashboardData, } = useUserDashboard(selectedMonth)
   if (loading) return <Loader />
+  
   return (
     <div>
       <h1 className="text-4xl font-bold mb-4">
@@ -22,17 +23,17 @@ function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
   <StatCard
     title="Total Reports"
-    value={reportStats?.totalReports || 0}
+    value={todayReports?.totalReports || 0}
   />
 
   <StatCard
     title="Monthly Reports"
-    value={reportStats?.monthlyReports || 0}
+    value={todayReports?.monthlyReports || 0}
   />
 
   <StatCard
     title="Weekly Reports"
-    value={reportStats?.weeklyReports || 0}
+    value={todayReports?.weeklyReports || 0}
   />
 
   <StatCard
@@ -145,4 +146,4 @@ function AdminDashboard() {
   )
 }
 
-export default AdminDashboard
+export default UserDashboard

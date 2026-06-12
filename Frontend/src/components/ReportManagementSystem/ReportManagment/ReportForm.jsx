@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { fetchAllReportTemplates } from '../../../services/api/reportTemplateApi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ReportPDF from './ReportPDF'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { toast } from 'react-toastify'
 import { createReport, updateReport } from '../../../services/api/reportApi'
+import { AuthContext } from '../../../context/AuthProvider'
 
 const INITIAL = {
   reportTemplateId: "",
@@ -19,8 +20,11 @@ function ReportForm() {
   const [reportData, setReportData] = useState([])
   const { state } = useLocation()
   const navigate = useNavigate()
+  const { user } = useContext(AuthContext)
 
-  console.log('state: ', state)
+  console.log('user: ',user)
+
+  console.log('user: ', user)
 
   const fetchAllReportTemplateData = async () => {
     try {
@@ -69,7 +73,7 @@ function ReportForm() {
     updatedReportData[index] = { label, value }
     setForm({
       ...form,
-      reportData: updatedReportData
+      reportData: updatedReportData 
     })
   }
 
@@ -77,7 +81,7 @@ function ReportForm() {
     e?.preventDefault()
     setLoading(true)
     try {
-      const payload = form;
+      const payload = { ...form, createdBy: user.id };
       const response = await state?.mode === "edit" ?
         updateReport(payload, state?.item?.id) : createReport(payload);
         toast.success(response?.data?.message || 'report created successfully')

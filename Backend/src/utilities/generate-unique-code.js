@@ -1,5 +1,7 @@
+import { prisma } from "../config/db.js";
+
 const generateUniqueCode = async (modelName, prefix) => {
-    const latestRecord = await db[modelName].findFirst({
+    const latestRecord = await prisma[modelName].findFirst({
         orderBy: { createdAt: "desc" },
         select: { code: true }
     });

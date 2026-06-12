@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { authLogout } from "../../services/api/authApi";
 
 function Header({ setIsOpen }) {
-  const { user } = useContext(AuthContext)
+  const { setUser,user } = useContext(AuthContext)
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -18,6 +18,7 @@ function Header({ setIsOpen }) {
     try {
       const response = await authLogout();
       toast.success(response?.data?.message || `${user?.name} logout successfully`)
+      setUser(null)
       setTimeout(() => {
         navigate('/login')
       }, 1000)

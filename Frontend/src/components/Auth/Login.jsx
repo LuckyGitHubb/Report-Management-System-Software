@@ -33,7 +33,7 @@ function Login() {
             toast.success(response?.data?.message || `${form.role} login successfully`)
             setUser(response?.data?.data)
           setTimeout(() => {
-            navigate('/dashboard')
+            specificRole==="ADMIN" ? navigate('/admin-dashboard') : navigate('/dashboard') 
           }, 1000)
         } catch (error) {
           toast.error(error?.response?.data?.message || 'something went wrong')

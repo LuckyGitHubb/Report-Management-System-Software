@@ -5,7 +5,7 @@ import {
   fetchUserMonthlyReports,
   fetchUserRecentReports,
   fetchUserTodayReports,
-} from "../services/api/userDashboardApi";
+} from "../services/api/dashboardApi";
 
 const useUserDashboard = (month) => {
   const [loading, setLoading] = useState(false);

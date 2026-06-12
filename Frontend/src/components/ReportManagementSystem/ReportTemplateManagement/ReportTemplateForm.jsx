@@ -67,8 +67,8 @@ function ReportTemplateForm() {
                 navigate('/report/templates')
             }, 1000)
         } catch (e) {
-             toast.error(error?.response?.data?.message || 'something went wrong')
-             console.log(e)
+             toast.error(e?.response?.data?.message || 'something went wrong')
+             console.log(e)     
         } finally {
             setLoading(false);
         }

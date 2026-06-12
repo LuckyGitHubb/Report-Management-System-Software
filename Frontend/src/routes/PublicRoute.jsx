@@ -6,10 +6,17 @@ function PublicRoute({ children }) {
   const { user } = useContext(AuthContext);
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return (
+      <Navigate
+        to={user.role === "ADMIN"
+          ? "/admin-dashboard"
+          : "/dashboard"}
+        replace
+      />
+    );
   }
 
   return children;
 }
 
-export default PublicRoute;
+export default PublicRoute

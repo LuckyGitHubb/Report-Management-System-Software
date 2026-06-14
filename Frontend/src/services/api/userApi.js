@@ -7,3 +7,7 @@ export const fetchAllUsers = () => {
 export const fetchUsertById = (id) => {
   return baseApi.get(`/auth/user/${id}`);
 };
+
+export const getMe = () => {
+  return baseApi.get(`/auth/me`);
+};

@@ -6,12 +6,14 @@ import { AuthContext } from "../../context/AuthProvider";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { authLogout } from "../../services/api/authApi";
+import ProfileModal from "./ProfileModal";
 
 function Header({ setIsOpen }) {
   const { setUser,user } = useContext(AuthContext)
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [openProfile,setOpenProfile] = useState(false)
 
   const handleLogout = async () => {
     setLoading(true)
@@ -30,6 +32,7 @@ function Header({ setIsOpen }) {
       setLoading(false)
     }
   }
+  console.log('user hai mera: ',user)
   return (
     <header className="h-16 bg-white border-b shadow-sm px-6 flex items-center justify-between">
       {/* Left Side */}
@@ -50,45 +53,65 @@ function Header({ setIsOpen }) {
       <div className="flex items-center gap-4">
         {/* Notification */}
         <button className="relative p-2 rounded-full hover:bg-gray-100">
-          <Bell size={20} />
+          <Bell size={20} />  
 
           <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
         </button>
 
         {/* User */}
         <div className="relative">
-          <div
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer"
-          >
-            <User size={18} />
-          </div>
+  <div
+    onClick={() => setShowDropdown(!showDropdown)}
+    className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer"
+  >
+    <User size={18} />
+  </div>
 
-          {showDropdown && (
-            <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border z-50">
-              <div className="px-4 py-3 border-b">
-                <p className="font-medium">{user?.name}</p>
-                <p className="text-sm text-gray-500">
-                  {user?.role?.toLowerCase()}
-                </p>
-              </div>
+  {showDropdown && (
+    <>
+      {/* Overlay */}
+      <div
+        className="fixed inset-0 z-40"
+        onClick={() => setShowDropdown(false)}
+      />
 
-              <button
-                className="w-full text-left px-4 py-3 hover:bg-gray-100"
-              >
-                Profile
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50"
-              >
-                Logout
-              </button>
-            </div>
-          )}
+      {/* Dropdown */}
+      <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border z-50">
+        <div className="px-4 py-3 border-b">
+          <p className="font-medium">{user?.name}</p>
+          <p className="text-sm text-gray-500">
+            {user?.role?.toLowerCase()}
+          </p>
         </div>
+
+        <button
+          onClick={() => {
+            setOpenProfile(true);
+            setShowDropdown(false);
+          }}
+          className="w-full text-left px-4 py-3 hover:bg-gray-100"
+        >
+          Profile
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50"
+        >
+          Logout
+        </button>
       </div>
+    </>
+  )}
+</div>
+      </div>
+
+      <ProfileModal
+    isOpen={openProfile}
+    onClose={() => setOpenProfile(false)}
+    user={user}
+  />
+
     </header>
   );
 }

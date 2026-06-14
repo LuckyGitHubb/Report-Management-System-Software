@@ -1,9 +1,14 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
+import { Loader } from "../components/Common/Loader/Loader";
 
 function PublicRoute({ children }) {
-  const { user } = useContext(AuthContext);
+  const { user, authLoading } = useContext(AuthContext);
+      
+        if(authLoading){
+          return <Loader/>
+        }
 
   if (user) {
     return (

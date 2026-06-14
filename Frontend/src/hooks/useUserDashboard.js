@@ -10,11 +10,11 @@ import {
 const useUserDashboard = (month) => {
   const [loading, setLoading] = useState(false);
 
-  const [dashboardOverview, setDashboardOverview] = useState({});
+  const [dashboardOverview, setDashboardOverview] = useState([]);
   const [lastGeneratedReport, setLastGeneratedReport] = useState(null);
   const [monthlyReports, setMonthlyReports] = useState([]);
   const [recentReports, setRecentReports] = useState([]);
-  const [todayReports, setTodayReports] = useState({});
+  const [todayReports, setTodayReports] = useState([]);
 
   const fetchDashboardOverviewData = async () => {
     try {
@@ -22,7 +22,7 @@ const useUserDashboard = (month) => {
       setDashboardOverview(res?.data?.data);
     } catch (error) {
       console.log("error:", error);
-      setDashboardOverview({});
+      setDashboardOverview([]);
     }
   };
 
@@ -62,7 +62,7 @@ const useUserDashboard = (month) => {
       setTodayReports(res?.data?.data);
     } catch (error) {
       console.log("error:", error);
-      setTodayReports({});
+      setTodayReports([]);
     }
   };
 

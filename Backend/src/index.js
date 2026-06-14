@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: 'https://reportmanagementsystem.vercel.app/', // cors means Backend allows requests FROM frontend running on port 5173 ex:request: POST.GET,PUT etc
+        origin: 'https://reportmanagementsystem.vercel.app', // cors means Backend allows requests FROM frontend running on port 5173 ex:request: POST.GET,PUT etc
         credentials: true
     })
 )

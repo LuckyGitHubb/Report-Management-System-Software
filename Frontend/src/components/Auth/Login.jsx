@@ -19,6 +19,7 @@ function Login() {
     const uppercaseRole = role?.toUpperCase()
     const { state } = useLocation()
     const navigate = useNavigate()
+    const { setUser, fetchUser } = useContext(AuthContext)
 
     const handleLogin = async () => {
         setLoading(true)
@@ -29,7 +30,8 @@ function Login() {
                 role: specificRole
             }
             const response = await authLogin(payload);
-            toast.success(response?.data?.message || `${form.role} login successfully`)
+            await fetchUser()
+            toast.success(response?.data?.message || `${payload.role} login successfully`)
             setTimeout(() => {
                 specificRole === "ADMIN" ? navigate('/admin-dashboard') : navigate('/dashboard')
             }, 1000)

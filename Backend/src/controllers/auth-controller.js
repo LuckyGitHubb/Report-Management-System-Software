@@ -118,10 +118,30 @@ const getUserById = async (req,res) => {
     }
 }
 
+const getMe = async(req,res)=>{
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.id },
+            select: {
+                id: true,
+                name: true,
+                code: true,
+                email: true,
+                role: true,
+            }
+        })
+       return successResponse(res, user, "User fetched successfully.", 200);
+    }
+    catch (error) {
+        return errorResponse(res, error);
+    }
+}
+
 export {
     register,
     login,
     logout,
     getAllUsers,
-    getUserById
+    getUserById,
+    getMe
 }

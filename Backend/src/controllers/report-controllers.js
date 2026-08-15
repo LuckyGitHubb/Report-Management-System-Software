@@ -24,7 +24,7 @@ const createReport = async (req, res) => {
         reportTemplateId,
         reportData,
         code,
-        createdBy
+        createdBy: req.user.id
       },
     });
 
@@ -62,8 +62,9 @@ const updateReport = async (req, res) => {
 
 const getAllReports = async (req, res) => {
   try {
-
+    const isAdmin = req.user.role === "ADMIN";
     const reports = await prisma.report.findMany({
+      where: isAdmin ? {} : { createdBy: req.user.id },
       include: {
         reportTemplate: {
           select: {
@@ -87,9 +88,13 @@ const getAllReports = async (req, res) => {
 const getReportById = async (req, res) => {
   try {
     const { id } = req.params;
-
+    const isAdmin = req.user.role === "ADMIN"
     if (!id) {
       return earlyReturnRespone(res, "Report ID is required.", 400);
+    }
+
+    if(!isAdmin && report.createdBy !== req.user.id){
+      arlyReturnRespone(res, "You are not authorized to view this template.", 403);
     }
 
     const report = await prisma.report.findUnique({
@@ -99,6 +104,14 @@ const getReportById = async (req, res) => {
           select: {
             id: true,
             reportName: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
           }
         }
       },

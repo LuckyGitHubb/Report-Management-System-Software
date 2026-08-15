@@ -81,7 +81,7 @@ function ReportForm() {
     e?.preventDefault()
     setLoading(true)
     try {
-      const payload = { ...form, createdBy: user.id };
+      const payload = { ...form };
       const response = await state?.mode === "edit" ?
         updateReport(payload, state?.item?.id) : createReport(payload);
         toast.success(response?.data?.message || 'report created successfully')

@@ -19,7 +19,8 @@ const createReportTemplate = async (req, res) => {
       data: {
         reportName,
         fields,
-        code
+        code,
+        createdBy: req?.user?.id
       },
     });
 
@@ -62,7 +63,10 @@ const updateReportTemplate = async (req, res) => {
 
 const getAllReportTemplates = async (req, res) => {
     try {
-        const reportTemplates = await prisma.reportTemplate.findMany({})
+        const isAdmin = req.user.role === "ADMIN"
+        const reportTemplates = await prisma.reportTemplate.findMany({
+            where: isAdmin ? {} : { createdBy: req.user.id } 
+        })
         return successResponse(res, reportTemplates, "Medical Report Templates fetched successfully.", 200);
     }
     catch (error) {
@@ -83,8 +87,14 @@ const getReportTemplateById = async (req, res) => {
         }
 
         const reportTemplate = await prisma.reportTemplate.findUnique({
-            where: { id },      
+            where: { id },
+            include: { user: { select: { id: true, name: true, email: true, role: true } } }    
         });
+
+        const isAdmin = req.user.role === "ADMIN";
+        if(!isAdmin && reportTemplate.createdBy !== req.user.id){
+            earlyReturnRespone(res, "You are not authorized to view this template.", 403);
+        }
 
         if (!reportTemplate) {
             return earlyReturnRespone(

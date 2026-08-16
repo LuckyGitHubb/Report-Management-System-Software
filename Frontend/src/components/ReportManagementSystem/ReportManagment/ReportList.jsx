@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { fetchAllReports } from "../../../services/api/reportApi";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../Common/Loader/Loader";
+import { AuthContext } from "../../../context/AuthProvider";
+import { useContext } from "react";
 
 function ReportList() {
   const [reportData, setReportData] = useState([])
+  const { setUser,user } = useContext(AuthContext)
   const [loading,setLoading] = useState(false)
   const [paginatedReportData, setPaginatedReportData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -38,6 +41,8 @@ function ReportList() {
 
   if(loading) return <Loader/>
 
+  console.log('paginatedReportData:', paginatedReportData)
+
 
   return (
     <div className="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">
@@ -58,6 +63,12 @@ function ReportList() {
               <th className="text-left px-6 py-4 font-semibold text-gray-700">
                 Sr No.
               </th>
+
+              {user?.role === 'ADMIN' && (
+              <th className="text-left px-6 py-4 font-semibold text-gray-700">
+                User
+              </th>
+              )}
 
               <th className="text-left px-6 py-4 font-semibold text-gray-700">
                 Code
@@ -83,6 +94,12 @@ function ReportList() {
                   <td className="px-6 py-4">
                     {index + 1}
                   </td>
+
+                  {user?.role === "ADMIN" && (
+                  <td className="px-6 py-4">
+                    {item?.user?.name}
+                  </td>
+                  )}
 
                   <td className="px-6 py-4">
                     {item?.code}

@@ -65,7 +65,8 @@ const getAllReportTemplates = async (req, res) => {
     try {
         const isAdmin = req.user.role === "ADMIN"
         const reportTemplates = await prisma.reportTemplate.findMany({
-            where: isAdmin ? {} : { createdBy: req.user.id } 
+            where: isAdmin ? {} : { createdBy: req.user.id },
+            include: { user: { select: { id: true, name: true, email: true, role: true } } } 
         })
         return successResponse(res, reportTemplates, "Medical Report Templates fetched successfully.", 200);
     }

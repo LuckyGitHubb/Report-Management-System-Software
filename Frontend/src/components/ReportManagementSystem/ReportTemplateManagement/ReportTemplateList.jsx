@@ -4,9 +4,12 @@ import { fetchAllReports } from "../../../services/api/reportApi";
 import { useNavigate } from "react-router-dom";
 import { fetchAllReportTemplates } from "../../../services/api/reportTemplateApi";
 import { Loader } from "../../Common/Loader/Loader";
+import { AuthContext } from "../../../context/AuthProvider";
+import { useContext } from "react";
 
 function ReportTemplateList() {
   const [reportTemplateData, setReportTemplateData] = useState([])
+  const { setUser,user } = useContext(AuthContext)
   const [loading,setLoading] = useState(false)
   const [paginatedReportTemplateData, setPaginatedReportTemplateData] = useState([])
   const [pageSize, setPageSize] = useState(5)
@@ -68,6 +71,12 @@ if(loading) return <Loader/>
                 Sr No.
               </th>
 
+              {user?.role === 'ADMIN' && (
+              <th className="text-left px-6 py-4 font-semibold text-gray-700">
+                User
+              </th>
+              )}
+
               <th className="text-left px-6 py-4 font-semibold text-gray-700">
                 code
               </th>
@@ -92,6 +101,12 @@ if(loading) return <Loader/>
                   <td className="px-6 py-4">
                     {index + 1}
                   </td>
+
+                  {user?.role === "ADMIN" && (
+                  <td className="px-6 py-4">
+                    {item?.user?.name}
+                  </td>
+                  )}
 
                   <td className="px-6 py-4">
                     {item?.code}
